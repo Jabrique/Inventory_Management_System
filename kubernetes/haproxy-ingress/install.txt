@@ -1,0 +1,13 @@
+#Install Helm
+sudo snap install helm --classic
+
+#Add the HAProxy Technologies Helm repository
+helm repo add haproxytech https://haproxytech.github.io/helm-charts
+
+#Update your list of Helm charts
+helm repo update
+
+#Install the latest version of the ingress controller
+helm install haproxy-kubernetes-ingress haproxytech/kubernetes-ingress \
+  --create-namespace \
+  --namespace haproxy-controller
