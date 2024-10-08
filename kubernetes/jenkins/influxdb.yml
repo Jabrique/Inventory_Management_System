@@ -1,0 +1,93 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: influxdb-credentials
+  namespace: jenkins
+type: Opaque
+data:
+  INFLUXDB_ADMIN_USER: YWRtaW4=          # 'admin' (encoded in base64)
+  INFLUXDB_ADMIN_PASSWORD: YWRtaW5fcGFzc3dvcmQ=  # 'admin_password' (encoded in base64)
+  INFLUXDB_USER: amVua2luc191c2Vy        # 'jenkins_user' (encoded in base64)
+  INFLUXDB_USER_PASSWORD: amVua2luc19wYXNzd29yZA== # 'jenkins_password' (encoded in base64)
+
+# StatefulSet for InfluxDB with secrets for credentials
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+    labels:
+        app: influxdb
+    name: influxdb
+    namespace: jenkins
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: influxdb
+    serviceName: influxdb
+    template:
+        metadata:
+            labels:
+                app: influxdb
+        spec:
+            containers:      
+              - image: influxdb:1.8.10 
+                name: influxdb
+                ports:
+                  - containerPort: 8086
+                    name: influxdb
+                env:
+                  - name: INFLUXDB_DB
+                    value: "jenkins_db"  
+                  - name: INFLUXDB_ADMIN_USER
+                    valueFrom:
+                      secretKeyRef:
+                        name: influxdb-credentials
+                        key: INFLUXDB_ADMIN_USER
+                  - name: INFLUXDB_ADMIN_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: influxdb-credentials
+                        key: INFLUXDB_ADMIN_PASSWORD
+                  - name: INFLUXDB_USER
+                    valueFrom:
+                      secretKeyRef:
+                        name: influxdb-credentials
+                        key: INFLUXDB_USER
+                  - name: INFLUXDB_USER_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: influxdb-credentials
+                        key: INFLUXDB_USER_PASSWORD
+                  - name: INFLUXDB_HTTP_AUTH_ENABLED
+                    value: "true"  
+                volumeMounts:
+                  - mountPath: /var/lib/influxdb 
+                    name: data
+    volumeClaimTemplates:
+      - metadata:
+            name: data
+            namespace: jenkins
+        spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+                requests:
+                    storage: 10Gi  
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: influxdb
+    namespace: jenkins
+spec:
+    ports:
+      - name: influxdb
+        port: 8086
+        targetPort: 8086
+        nodePort: 32591
+    selector:
+        app: influxdb
+    type: NodePort

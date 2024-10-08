@@ -1,0 +1,4 @@
+change service type to nodeport
+helm install --values values.yaml argocd argo/argo-cd --namespace argocd --create-namespace
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+helm upgrade argocd argo/argo-cd --values values.yaml -n argocd

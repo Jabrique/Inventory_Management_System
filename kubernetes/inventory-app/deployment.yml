@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-app
+  namespace: inventory-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: inventory
+  template:
+    metadata:
+      labels:
+        app: inventory
+    spec:
+      containers:
+        - name: inventory-app
+          image: harbor.internskomda.cloud/inventory-app/inventory-app:v0
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: inventory-configmap
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-cred
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-cred
+                  key: password
+          command:
+            - bash
+            - "-c"
+            - |
+              set -ex
+              php artisan migrate
+              apache2-foreground
