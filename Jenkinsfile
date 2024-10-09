@@ -43,7 +43,7 @@ timestamps {
                     sed -i "s#image: harbor.internskomda.cloud/inventory-app/inventory-app:v.*#image: harbor.internskomda.cloud/inventory-app/inventory-app:v${BUILD_NUMBER}#" kubernetes/inventory-app/inventory.yml
                     git add .
                     git commit -m "ci: Update deployment inventory-app image to version ${BUILD_NUMBER}"
-                    git push --force https://${GITHUB_TOKEN}@github.com/Jabrique/Inventory_Management_System HEAD:feature/kubernetes
+                    git push --force https://${GITHUB_TOKEN}@github.com/Jabrique/Inventory_Management_System HEAD:ci/deployment-image
                 '''
             }
       }
