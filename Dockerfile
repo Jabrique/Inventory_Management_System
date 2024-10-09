@@ -40,7 +40,8 @@ ENV LOG_CHANNEL=stderr
 # Copy code and run composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . /var/www/html
-RUN cd /var/www/html && composer install --no-dev --prefer-dist --optimize-autoloader --timeout=600
+ENV COMPOSER_PROCESS_TIMEOUT=600
+RUN cd /var/www/html && composer install --no-dev --prefer-dist --optimize-autoloader
 
 # Change ownership
 RUN chown -R www-data:www-data /var/www/html
