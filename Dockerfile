@@ -37,11 +37,18 @@ RUN a2enmod rewrite
 # Ensure PHP logs are captured by the container
 ENV LOG_CHANNEL=stderr
 
-# Copy code and run composer
+# Copy composer from official composer image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy composer.json and composer.lock first to cache dependencies layer
+COPY composer.json composer.lock /var/www/html/
+
+# Run composer install separately to cache dependencies
+WORKDIR /var/www/html
+RUN composer install --no-dev --prefer-dist --optimize-autoloader
+
+# Copy source code (this is after dependencies installation to avoid invalidating cache)
 COPY . /var/www/html
-ENV COMPOSER_PROCESS_TIMEOUT=600
-RUN cd /var/www/html && composer install --no-dev --prefer-dist --optimize-autoloader
 
 # Change ownership
 RUN chown -R www-data:www-data /var/www/html
