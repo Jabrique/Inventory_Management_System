@@ -1,4 +1,4 @@
-FROM composer:latest AS composer
+FROM docker.io/library/composer:latest AS composer
 FROM php:8.3-apache
 
 # Install packages
