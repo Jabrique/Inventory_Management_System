@@ -1,3 +1,4 @@
+FROM composer:latest AS composer
 FROM php:8.3-apache
 
 # Install packages
@@ -38,7 +39,7 @@ RUN a2enmod rewrite
 ENV LOG_CHANNEL=stderr
 
 # Copy composer from official composer image
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Copy composer.json and composer.lock first to cache dependencies layer
 COPY composer.json composer.lock /var/www/html/
