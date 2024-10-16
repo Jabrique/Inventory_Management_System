@@ -52,6 +52,7 @@ timestamps {
                     sh '''
                         git config user.email "shironimex@gmail.com"
                         git config user.name "Jabrique"
+                        git checkout ci/deployment-image
                         sed -i "s#image: harbor.internskomda.cloud/inventory-app/inventory-app:v.*#image: harbor.internskomda.cloud/inventory-app/inventory-app:v${BUILD_NUMBER}#" kubernetes/inventory-app/deployment.yml
                         git add .
                         git commit -m "ci: Update deployment inventory-app image to version ${BUILD_NUMBER}"
