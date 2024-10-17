@@ -4,7 +4,7 @@ metadata:
   name: inventory-ingress
   namespace: inventory-app
 spec:
-  ingressClassName: nginx
+  ingressClassName: haproxy
   rules:
   - host: internskomda.cloud
     http:
