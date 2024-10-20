@@ -38,7 +38,7 @@ class ProductController extends Controller
             ]))
         );
 
-        $productTransport = (new OtlpHttpTransportFactory())->create('http://10.30.30.5:4420/v1/traces', 'application/json');
+        $productTransport = (new OtlpHttpTransportFactory())->create('http://alloy.monitoring.svc.cluster.local:4420/v1/traces', 'application/json');
         $productSpanExporter = new SpanExporter($productTransport);
         $productTracerProvider = TracerProvider::builder()
             ->addSpanProcessor(new SimpleSpanProcessor($productSpanExporter))
