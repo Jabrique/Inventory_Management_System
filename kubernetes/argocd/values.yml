@@ -1208,8 +1208,7 @@ dex:
 
 ## Redis
 redis:
-  # -- Enable redis
-  enabled: true
+  enabled: false
   # -- Redis name
   name: redis
 
@@ -1604,7 +1603,7 @@ redis-ha:
 # External Redis parameters
 externalRedis:
   # -- External Redis server host
-  host: ""
+  host: "172.16.16.13"
   # -- External Redis username
   username: ""
   # -- External Redis password
@@ -1613,7 +1612,7 @@ externalRedis:
   port: 6379
   # -- The name of an existing secret with Redis (must contain key `redis-password`) and Sentinel credentials.
   # When it's set, the `externalRedis.password` parameter is ignored
-  existingSecret: ""
+  existingSecret: "argocd-redis-secret"
   # -- External Redis Secret annotations
   secretAnnotations: {}
 
@@ -3265,10 +3264,10 @@ notifications:
   ## For more information: https://argo-cd.readthedocs.io/en/stable/operator-manual/notifications/services/overview/
   notifiers: 
     service.webhook.devlake: |
-      url: http://192.168.49.2:32001/api/rest/plugins/webhook/connections/2/deployments
+      url: http://devlake-ui.devlake.svc.cluster.local:4000/api/rest/plugins/webhook/connections/1/deployments
       headers:
       - name: Authorization 
-        value: Bearer aDsl4rXE7B1Zav7kX5TIet2orhu285NLIdf9fQJXZ7CCTY5EiQ2UhZhlZKNrcW7J3uglpYTs1sVdgJSy9xtQgrkQ9O4sJlwseUCxANXTkwv0UOW0qIutcYtNh5ELwrgf
+        value: Bearer HriuphGlJTbG3oiarCJxveipcujwHRBAUluy0TsMfB0uTe39JcqPqcPHZ8Dh0mRm6ztGKp7h7SiK8E2VlO8YxCR0OBOtfRo6SAhaR4ByAwYifHhCenJsET3xyxCWNTDy
     # service.slack: |
     #   token: $slack-token
 
