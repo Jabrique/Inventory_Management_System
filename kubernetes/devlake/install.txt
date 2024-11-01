@@ -1,0 +1,18 @@
+helm repo add devlake https://apache.github.io/incubator-devlake-helm-chart
+
+helm repo update
+
+ENCRYPTION_SECRET=$(openssl rand -base64 2000 | tr -dc 'A-Z' | fold -w 128 | head -n 1)
+
+helm install devlake devlake/devlake -n devlake \
+  --set mysql.useExternal=true \
+  --set mysql.externalServer=172.16.16.8 \
+  --set mysql.externalPort=3306 \
+  --set mysql.username=jabriq \
+  --set mysql.password=test123 \
+  --set mysql.database=devlake_db \
+  --set grafana.enabled=false \
+  --set grafana.external.url=http://grafana.monitoring.svc.cluster.local \
+  --set lake.encryptionSecret.secret=$ENCRYPTION_SECRET
+
+helm uninstall devlake -n devlake

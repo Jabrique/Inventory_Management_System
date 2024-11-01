@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: haproxy-kubernetes-ingress
+    meta.helm.sh/release-namespace: haproxy-controller
+  labels:
+    app.kubernetes.io/instance: haproxy-kubernetes-ingress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: kubernetes-ingress
+    app.kubernetes.io/version: 3.0.1
+    helm.sh/chart: kubernetes-ingress-1.41.0
+  name: haproxy-kubernetes-ingress
+  namespace: haproxy-controller
+data:
+  syslog-server: "address: fluent-fluent-bit.monitoring.svc.cluster.local, facility:local0"
