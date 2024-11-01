@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: inventory-app
+  namespace: inventory-app
+spec:
+  scaleTargetRef:
+    name: inventory-app
+  minReplicaCount: 1
+  maxReplicaCount: 5
+  fallback:
+    failureThreshold: 3
+    replicas: 3
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: http://prometheus-server.monitoring.svc.cluster.local:9090
+      query: sum(rate(haproxy_backend_http_requests_total{proxy="inventory-app_inventory-app_8080"}[5m]))
+      threshold: '0.1'
