@@ -813,7 +813,7 @@ serverFiles:
       - job_name: haproxy-ingress
         scrape_interval: 15s
         static_configs:
-          - targets: ['172.16.16.10:31024']
+          - targets: ['haproxy-kubernetes-ingress.haproxy-controller.svc.cluster.local:1024']
 
       # A scrape configuration for running Prometheus on a Kubernetes cluster.
       # This uses separate scrape configs for cluster components (i.e. API server, node)
