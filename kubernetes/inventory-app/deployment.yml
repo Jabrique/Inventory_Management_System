@@ -13,10 +13,6 @@ spec:
       labels:
         app: inventory
     spec:
-      hostAliases:
-        - ip: "172.16.16.200"
-          hostnames:
-          - "harbor.internskomda.cloud"
       imagePullSecrets:
       - name: harborregcred
       containers:
