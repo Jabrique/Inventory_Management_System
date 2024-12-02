@@ -17,7 +17,7 @@ spec:
       - name: harborregcred
       containers:
         - name: inventory-app
-          image: harbor.internskomda.cloud/inventory-app/inventory-app:v20
+          image: harbor.internskomda.cloud/inventory-app/inventory-app:v23
           ports:
             - containerPort: 80
           envFrom:
